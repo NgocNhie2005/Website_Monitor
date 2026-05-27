@@ -1,6 +1,8 @@
 # Website Monitor — Java Implementation
 
 ## Package Structure
+
+```text
 com.monitor
 ├── Main.java                          (entry point)
 ├── model/
@@ -16,6 +18,7 @@ com.monitor
 │   └── Notification.java
 └── channel/
     └── NotificationChannel.java
+```
 
 ## Coupling Metrics
 
