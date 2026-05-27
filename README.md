@@ -15,7 +15,7 @@ com.monitor
 ├── notification/
 │   └── Notification.java
 └── channel/
-└── NotificationChannel.java
+    └── NotificationChannel.java
 
 ## Coupling Metrics
 
