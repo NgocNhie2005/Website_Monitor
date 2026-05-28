@@ -58,8 +58,7 @@ public class MonitoringScheduler implements WebsiteSubject {
     }
 
     public String getStatus() {
-        return "MonitoringScheduler running with interval=" + interval
-                + ", activeJobs=" + activeJobs.size();
+        return "MonitoringScheduler running with interval=" + interval + ", activeJobs=" + activeJobs.size();
     }
 
     public Duration getInterval() { return interval; }

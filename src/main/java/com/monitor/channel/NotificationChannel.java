@@ -13,8 +13,7 @@ public class NotificationChannel {
  
     public void send(Notification notification) {
         if (validate()) {
-            System.out.println("[" + channelType.toUpperCase() + "] Sending to " + address
-                    + ": " + notification.getContent());
+            System.out.println("[" + channelType.toUpperCase() + "] Sending to " + address + ": " + notification.getContent());
         } else {
             System.err.println("Invalid channel configuration for type: " + channelType);
         }
