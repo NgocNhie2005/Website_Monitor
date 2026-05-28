@@ -16,6 +16,9 @@ com.monitor
 │   └── MonitoringScheduler.java
 ├── notification/
 │   └── Notification.java
+├── observer/
+│   ├── WebsiteObserver.java
+│   └── WebsiteSubject.java
 └── channel/
     └── NotificationChannel.java
 ```
