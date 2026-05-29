@@ -1,4 +1,4 @@
-# Website Monitor — Java Implementation
+# Website Monitor - Java Implementation
 
 ## Package Structure
 
@@ -26,9 +26,9 @@ com.monitor
 ## Coupling Metrics
 
 ### Definitions
-- **Ca (Afferent Coupling)** — how many other classes depend on this class (incoming)
-- **Ce (Efferent Coupling)** — how many classes this class depends on (outgoing)
-- **Instability (I)** — `I = Ce / (Ca + Ce)` → 0 = maximally stable, 1 = maximally unstable
+- **Ca (Afferent Coupling)** - how many other classes depend on this class (incoming)
+- **Ce (Efferent Coupling)** - how many classes this class depends on (outgoing)
+- **Instability (I)** — `I = Ce / (Ca + Ce)` -> 0 = maximally stable, 1 = maximally unstable
 
 ### Per-Class Analysis
 
@@ -47,8 +47,8 @@ com.monitor
 > Note: `Main` is excluded as an application bootstrap class.
 
 ### Key Observations
-- `Frequency`, `Status`, `Website` are **maximally stable** (I = 0) — good candidates to be depended upon.
-- `User` and `MonitoringScheduler` are **maximally unstable** (I = 1) — they are leaves or orchestrators.
+- `Frequency`, `Status`, `Website` are **maximally stable** (I = 0) - good candidates to be depended upon.
+- `User` and `MonitoringScheduler` are **maximally unstable** (I = 1) - they are leaves or orchestrators.
 - `MonitoringScheduler` has the **highest efferent coupling (Ce = 4)**, making it a coupling hotspot.
 
 ## Package-Level Metrics
@@ -64,7 +64,7 @@ com.monitor
 
 ### 1. Introduce Interfaces / Abstractions
 Extract interfaces like `INotificationChannel` and `INotification` in a shared `api` package.
-`MonitoringScheduler` then depends on abstractions, not concrete classes — applying the **Dependency Inversion Principle (DIP)**.
+`MonitoringScheduler` then depends on abstractions, not concrete classes - applying the **Dependency Inversion Principle (DIP)**.
 
 ### 2. Use an Event/Observer Pattern
 Instead of `MonitoringScheduler` calling `Notification` directly, publish a `WebsiteChangedEvent`.
