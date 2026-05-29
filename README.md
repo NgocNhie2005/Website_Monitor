@@ -30,7 +30,7 @@ com.monitor
 - **Ce (Efferent Coupling)** - how many classes this class depends on (outgoing)
 - **Instability (I)** — `I = Ce / (Ca + Ce)` -> 0 = maximally stable, 1 = maximally unstable
 
-Only project classes/interfaces are counted. Java library classes such as `List`, `String`, `LocalDateTime`, and `UUID` are excluded.
+### Only project classes/interfaces are counted. Java library classes such as `List`, `String`, `LocalDateTime`, and `UUID` are excluded.
 ---
 
 ### Per-Class Analysis
