@@ -30,35 +30,45 @@ com.monitor
 - **Ce (Efferent Coupling)** - how many classes this class depends on (outgoing)
 - **Instability (I)** — `I = Ce / (Ca + Ce)` -> 0 = maximally stable, 1 = maximally unstable
 
+Only project classes/interfaces are counted. Java library classes such as `List`, `String`, `LocalDateTime`, and `UUID` are excluded.
+---
+
 ### Per-Class Analysis
 
 | Class | Ca | Ce | I | Notes |
 |---|---|---|---|---|
-| `User` | 0 | 1 | 1.00 | Depends on `Subscription`; nothing depends on `User` |
-| `Subscription` | 3 | 2 | 0.40 | Used by `User`, `MonitoringScheduler`x2; depends on `NotiPreference`, `Status` |
-| `NotiPreference` | 2 | 1 | 0.33 | Used by `Subscription`, `MonitoringScheduler`; depends on `Frequency` |
-| `Frequency` | 1 | 0 | 0.00 | Pure enum, only used by `NotiPreference` |
-| `Status` | 1 | 0 | 0.00 | Pure enum, only used by `Subscription` |
-| `Website` | 1 | 0 | 0.00 | Used by `MonitoringScheduler`; no outgoing deps |
-| `MonitoringScheduler` | 0 | 4 | 1.00 | Orchestrator; depends on `Subscription`, `Website`, `Notification`, `NotificationChannel` |
-| `Notification` | 2 | 1 | 0.33 | Used by `MonitoringScheduler`, `Main`; depends on `NotificationChannel` |
-| `NotificationChannel` | 2 | 1 | 0.33 | Used by `Notification`, `MonitoringScheduler`; depends on `Notification` |
+| `User` | 0 | 1 | 1.00 | Depends on `Subscription`; no incoming dependencies |
+| `Subscription` | 2 | 2 | 0.50 | Used by `User` and `MonitoringScheduler`; depends on `NotiPreference` and `Status` |
+| `NotiPreference` | 1 | 1 | 0.50 | Used by `Subscription`; depends on `Frequency` |
+| `Frequency` | 1 | 0 | 0.00 | Enum used only by `NotiPreference` |
+| `Status` | 1 | 0 | 0.00 | Enum used only by `Subscription` |
+| `Website` | 3 | 0 | 0.00 | Used by `MonitoringScheduler`, `Notification`, and `WebsiteObserver`; no outgoing dependencies |
+| `MonitoringScheduler` | 0 | 4 | 1.00 | Depends on `Subscription`, `Website`, `WebsiteObserver`, and `WebsiteSubject` |
+| `Notification` | 0 | 3 | 1.00 | Depends on `NotificationChannel`, `Website`, and `WebsiteObserver` |
+| `NotificationChannel` | 1 | 1 | 0.50 | Used by `Notification`; depends on `Notification` |
+| `WebsiteObserver` | 2 | 1 | 0.33 | Implemented/used by `Notification` and `MonitoringScheduler`; depends on `Website` |
+| `WebsiteSubject` | 1 | 1 | 0.50 | Implemented by `MonitoringScheduler`; depends on `WebsiteObserver` |
 
 > Note: `Main` is excluded as an application bootstrap class.
 
 ### Key Observations
-- `Frequency`, `Status`, `Website` are **maximally stable** (I = 0) - good candidates to be depended upon.
-- `User` and `MonitoringScheduler` are **maximally unstable** (I = 1) - they are leaves or orchestrators.
-- `MonitoringScheduler` has the **highest efferent coupling (Ce = 4)**, making it a coupling hotspot.
+- `Frequency`, `Status`, and `Website` are maximally stable (`I = 0`), making them good foundational components.
+- `User`, `MonitoringScheduler`, and `Notification` are highly unstable (`I = 1`) because they depend on multiple other classes while no classes depend on them.
+- `MonitoringScheduler` has the highest efferent coupling (`Ce = 4`), making it the main orchestration component of the system.
+- The system follows a layered structure:
+  - Stable core model classes (`Website`, enums)
+  - Observer abstractions (`WebsiteObserver`, `WebsiteSubject`)
+  - Service/controller classes (`MonitoringScheduler`, `Notification`)
 
 ## Package-Level Metrics
 
 | Package | Ca | Ce | I |
 |---|---|---|---|
 | `model` | 3 | 0 | 0.00 |
-| `scheduler` | 0 | 3 | 1.00 |
-| `notification` | 2 | 1 | 0.33 |
-| `channel` | 2 | 1 | 0.33 |
+| `scheduler` | 0 | 4 | 1.00 |
+| `notification` | 1 | 3 | 0.75 |
+| `channel` | 1 | 1 | 0.50 |
+| `observer` | 2 | 2 | 0.50 |
 
 ## Options to Reduce Coupling Between Packages
 
