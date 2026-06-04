@@ -19,8 +19,13 @@ com.monitor
 ├── observer/
 │   ├── WebsiteObserver.java
 │   └── WebsiteSubject.java
-└── channel/
-    └── NotificationChannel.java
+├── channel/
+│   └── NotificationChannel.java
+└── strategy/
+    ├── ComparisonStrategy.java
+    ├── ContentSizeStrategy.java
+    ├── HtmlContentStrategy.java
+    └── TextContentStrategy.java
 ```
 
 ## Coupling Metrics
@@ -91,6 +96,37 @@ keeping `Notification` a pure data object with no outgoing dependencies.
 ### 5. Apply the Stable-Dependencies Principle (SDP)
 Ensure packages only depend on packages with lower instability.
 Extracting a shared `api` package (I=0) gives both a stable abstraction to depend on.
+
+## Coding Conventions
+
+### Naming
+- **Classes**: PascalCase → `MonitoringScheduler`, `HtmlContentStrategy`
+- **Methods & variables**: camelCase → `hasChanged()`, `lastContent`
+- **Constants & enums**: UPPER_SNAKE_CASE → `Status.ACTIVE`, `Frequency.HOURLY`
+- **Interfaces**: plain PascalCase, no `I` prefix → `ComparisonStrategy`, `WebsiteObserver`
+- **Packages**: all lowercase → `com.monitor.strategy`
+
+### Class Design
+- One class per file; filename matches class name exactly
+- All fields are `private`, exposed only via getters/setters
+- Constructors set sensible defaults (e.g. `HtmlContentStrategy` as default comparison strategy)
+- Interfaces used to define contracts (`WebsiteObserver`, `WebsiteSubject`, `ComparisonStrategy`)
+
+### Methods
+- Short, single-purpose methods (max ~20 lines)
+- Boolean methods named as questions: `hasChanged()`, `validate()`
+- Void methods named as commands: `generate()`, `deliver()`, `scheduleCheck()`
+
+### Formatting
+- 4-space indentation
+- Opening brace `{` on the same line as the declaration
+- One blank line between methods
+- No redundant comments — code is written to be self-explanatory
+
+### Design Patterns Applied
+- **Observer pattern**: `Website` (Subject) notifies `Subscription` (Observer) on change
+- **Strategy pattern**: interchangeable comparison strategies via `ComparisonStrategy` interface
+- **Dependency Injection**: strategies and channels injected via constructor
 
 ## Building & Running
 
