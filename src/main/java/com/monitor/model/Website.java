@@ -1,37 +1,69 @@
 package com.monitor.model;
+
+import com.monitor.observer.WebsiteObserver;
+import com.monitor.observer.WebsiteSubject;
+import com.monitor.strategy.ComparisonStrategy;
+import com.monitor.strategy.HtmlContentStrategy;
+
 import java.time.LocalDateTime;
-public class Website {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Website implements WebsiteSubject {
     private String url;
     private LocalDateTime lastChecked;
-    private String contentHash;
- 
+    private String lastContent;
+    private ComparisonStrategy strategy;
+    private List<WebsiteObserver> observers;
+
     public Website(String url) {
         this.url = url;
-        this.contentHash = "";
+        this.lastContent = "";
+        this.strategy = new HtmlContentStrategy();
+        this.observers = new ArrayList<>();
     }
- 
-    public String fetchContent() {
-        // Simulated fetch – in production would use HttpClient
-        System.out.println("Fetching content from: " + url);
-        return "<html>Simulated content from " + url + "</html>";
+
+    public Website(String url, ComparisonStrategy strategy) {
+        this.url = url;
+        this.lastContent = "";
+        this.strategy = strategy;
+        this.observers = new ArrayList<>();
     }
- 
-    public boolean hasChanged() {
-        String freshContent = fetchContent();
-        String freshHash = String.valueOf(freshContent.hashCode());
-        if (!freshHash.equals(contentHash)) {
-            contentHash = freshHash;
-            lastChecked = LocalDateTime.now();
-            return true;
+
+    @Override
+    public void addObserver(WebsiteObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(WebsiteObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (WebsiteObserver observer : observers) {
+            observer.onWebsiteChanged(this);
         }
-        lastChecked = LocalDateTime.now();
-        return false;
     }
- 
-    public String getUrl() { return url; }
- 
-    public LocalDateTime getLastChecked() { return lastChecked; }
-    public String getContentHash()        { return contentHash; }
-    public void setContentHash(String hash) { this.contentHash = hash; }
-    public void setLastChecked(LocalDateTime time) { this.lastChecked = time; }
+
+    public String fetchContent() {
+        System.out.println("Fetching content from: " + url);
+        return "<html><body>Simulated content from " + url + "</body></html>";
+    }
+
+    public void check() {
+        String freshContent = fetchContent();
+        boolean changed = strategy.hasChanged(lastContent, freshContent);
+        lastContent = freshContent;
+        lastChecked = LocalDateTime.now();
+        if (changed) {
+            notifyObservers();
+        }
+    }
+
+    public void setStrategy(ComparisonStrategy strategy) { this.strategy = strategy; }
+    public ComparisonStrategy getStrategy()  { return strategy; }
+    public String getUrl()                   { return url; }
+    public LocalDateTime getLastChecked()    { return lastChecked; }
 }
