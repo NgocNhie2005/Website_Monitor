@@ -9,6 +9,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 public class Website implements WebsiteSubject {
     private String url;
     private LocalDateTime lastChecked;
@@ -48,8 +53,15 @@ public class Website implements WebsiteSubject {
     }
 
     public String fetchContent() {
-        System.out.println("Fetching content from: " + url);
-        return "<html><body>Simulated content from " + url + "</body></html>";
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
+            } catch (Exception e) {
+            System.err.println("Failed to fetch: " + url + " - " + e.getMessage());
+            return "";
+        }
     }
 
     public void check() {
