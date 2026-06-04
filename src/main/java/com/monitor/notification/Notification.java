@@ -15,8 +15,7 @@ public class Notification {
     }
 
     public void generate(String websiteUrl) {
-        this.content = "Change detected on website: " + websiteUrl
-                + " at " + LocalDateTime.now();
+        this.content = "Change detected on website: " + websiteUrl + " at " + LocalDateTime.now();
         System.out.println("Notification generated: " + content);
     }
 

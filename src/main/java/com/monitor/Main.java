@@ -8,29 +8,51 @@ import java.util.UUID;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("=== Strategy: Content Size ===");
+        System.out.println("Strategy: Content Size");
         runDemo(new ContentSizeStrategy());
 
-        System.out.println("\n=== Strategy: HTML Content ===");
+        System.out.println("\nStrategy: HTML Content");
         runDemo(new HtmlContentStrategy());
 
-        System.out.println("\n=== Strategy: Text Content ===");
+        System.out.println("\nStrategy: Text Content");
         runDemo(new TextContentStrategy());
     }
 
     private static void runDemo(ComparisonStrategy strategy) {
-        User user = new User("u1", "alice@example.com", "Alice");
+        // User 1 with 2 subscriptions
+        User alice = new User("u1", "alice@example.com", "Alice");
 
-        NotiPreference pref = new NotiPreference(Frequency.HOURLY, "EMAIL");
+        Subscription sub1 = new Subscription(UUID.randomUUID().toString(), "https://example.com");
+        sub1.setPreferences(new NotiPreference(Frequency.HOURLY, "EMAIL"));
 
-        Subscription sub = new Subscription(UUID.randomUUID().toString(), "https://example.com");
-        sub.setPreferences(pref);
-        user.addSubscription(sub);
+        Subscription sub2 = new Subscription(UUID.randomUUID().toString(), "https://news.ycombinator.com");
+        sub2.setPreferences(new NotiPreference(Frequency.DAILY, "SMS"));
 
-        Website website = new Website("https://example.com", strategy);
-        website.addObserver(sub);  // Subscription is the observer
+        alice.addSubscription(sub1);
+        alice.addSubscription(sub2);
 
-        website.check();
+        // User 2 with 1 subscription
+        User bob = new User("u2", "bob@example.com", "Bob");
+
+        Subscription sub3 = new Subscription(UUID.randomUUID().toString(), "https://github.com");
+        sub3.setPreferences(new NotiPreference(Frequency.MINUTELY, "EMAIL"));
+
+        bob.addSubscription(sub3);
+
+        // Website 1 - observed by alice sub1 and bob sub3
+        Website site1 = new Website("https://example.com", strategy);
+        site1.addObserver(sub1);
+        site1.addObserver(sub3);
+
+        // Website 2 - observed by alice sub2 only
+        Website site2 = new Website("https://news.ycombinator.com", strategy);
+        site2.addObserver(sub2);
+
+        System.out.println("-- Checking site1 --");
+        site1.check();
+
+        System.out.println("-- Checking site2 --");
+        site2.check();
 
         System.out.println("Strategy used: " + strategy.getName());
     }

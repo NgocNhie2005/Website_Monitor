@@ -100,11 +100,11 @@ Extracting a shared `api` package (I=0) gives both a stable abstraction to depen
 ## Coding Conventions
 
 ### Naming
-- **Classes**: PascalCase → `MonitoringScheduler`, `HtmlContentStrategy`
-- **Methods & variables**: camelCase → `hasChanged()`, `lastContent`
-- **Constants & enums**: UPPER_SNAKE_CASE → `Status.ACTIVE`, `Frequency.HOURLY`
-- **Interfaces**: plain PascalCase, no `I` prefix → `ComparisonStrategy`, `WebsiteObserver`
-- **Packages**: all lowercase → `com.monitor.strategy`
+- **Classes**: PascalCase -> `MonitoringScheduler`, `HtmlContentStrategy`
+- **Methods & variables**: camelCase -> `hasChanged()`, `lastContent`
+- **Constants & enums**: UPPER_SNAKE_CASE -> `Status.ACTIVE`, `Frequency.HOURLY`
+- **Interfaces**: plain PascalCase, no `I` prefix -> `ComparisonStrategy`, `WebsiteObserver`
+- **Packages**: all lowercase -> `com.monitor.strategy`
 
 ### Class Design
 - One class per file; filename matches class name exactly
@@ -121,7 +121,7 @@ Extracting a shared `api` package (I=0) gives both a stable abstraction to depen
 - 4-space indentation
 - Opening brace `{` on the same line as the declaration
 - One blank line between methods
-- No redundant comments — code is written to be self-explanatory
+- No redundant comments - code is written to be self-explanatory
 
 ### Design Patterns Applied
 - **Observer pattern**: `Website` (Subject) notifies `Subscription` (Observer) on change
