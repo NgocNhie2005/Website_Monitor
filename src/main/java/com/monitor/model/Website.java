@@ -71,6 +71,8 @@ public class Website implements WebsiteSubject {
         lastChecked = LocalDateTime.now();
         if (changed) {
             notifyObservers();
+        } else {
+            System.out.println("No change detected on: " + url + " (strategy: " + strategy.getName() + ")");
         }
     }
 

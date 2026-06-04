@@ -22,10 +22,10 @@ public class Main {
         // User 1 with 2 subscriptions
         User alice = new User("u1", "alice@example.com", "Alice");
 
-        Subscription sub1 = new Subscription(UUID.randomUUID().toString(), "https://wikipedia.org");
+        Subscription sub1 = new Subscription(UUID.randomUUID().toString(), "https://wikipedia.org", alice);
         sub1.setPreferences(new NotiPreference(Frequency.HOURLY, "EMAIL"));
 
-        Subscription sub2 = new Subscription(UUID.randomUUID().toString(), "https://github.com");
+        Subscription sub2 = new Subscription(UUID.randomUUID().toString(), "https://github.com", alice);
         sub2.setPreferences(new NotiPreference(Frequency.DAILY, "SMS"));
 
         alice.addSubscription(sub1);
@@ -34,7 +34,7 @@ public class Main {
         // User 2 with 1 subscription
         User bob = new User("u2", "bob@example.com", "Bob");
 
-        Subscription sub3 = new Subscription(UUID.randomUUID().toString(), "https://github.com");
+        Subscription sub3 = new Subscription(UUID.randomUUID().toString(), "https://wikipedia.org", bob);
         sub3.setPreferences(new NotiPreference(Frequency.MINUTELY, "EMAIL"));
 
         bob.addSubscription(sub3);

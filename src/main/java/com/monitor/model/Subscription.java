@@ -13,10 +13,12 @@ public class Subscription implements WebsiteObserver {
     private Status status;
     private LocalDateTime createdAt;
     private NotiPreference preferences;
+    private User user;
 
-    public Subscription(String subscriptionId, String url) {
+    public Subscription(String subscriptionId, String url, User user) {
         this.subscriptionId = subscriptionId;
         this.url = url;
+        this.user = user;
         this.status = Status.ACTIVE;
         this.createdAt = LocalDateTime.now();
     }
@@ -31,7 +33,7 @@ public class Subscription implements WebsiteObserver {
 
         if (preferences != null) {
             NotificationChannel channel = new NotificationChannel(
-                preferences.getChannel(), "user@example.com"
+                preferences.getChannel(), user.getEmail()
             );
             notification.deliver(channel);
         }
@@ -46,4 +48,5 @@ public class Subscription implements WebsiteObserver {
     public String getSubscriptionId()      { return subscriptionId; }
     public Status getStatus()              { return status; }
     public LocalDateTime getCreatedAt()    { return createdAt; }
+    public User getUser() { return user; }
 }
