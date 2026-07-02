@@ -9,6 +9,7 @@ public class TextContentStrategy implements ComparisonStrategy{
     }
 
     private String stripHtml(String html) {
+        if (html == null) return "";
         return html.replaceAll("<[^>]*>", "").trim();
     }
 
